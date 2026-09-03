@@ -2,7 +2,6 @@ package gg.mira.staff;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -20,7 +19,6 @@ public final class MiraStaffPlugin extends JavaPlugin implements Listener {
     private final Set<UUID> staffMode = new HashSet<>();
     private final Set<UUID> vanished = new HashSet<>();
     private final Set<UUID> frozen = new HashSet<>();
-    private final Map<UUID, GameMode> previousGameModes = new HashMap<>();
     private StaffApi api;
 
     @Override
@@ -41,7 +39,7 @@ public final class MiraStaffPlugin extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player player) && !command.getName().equalsIgnoreCase("freeze")) {
+        if (!(sender instanceof Player) && !command.getName().equalsIgnoreCase("freeze") && !command.getName().equalsIgnoreCase("staffchat")) {
             sender.sendMessage("§cPlayers only.");
             return true;
         }
@@ -59,16 +57,11 @@ public final class MiraStaffPlugin extends JavaPlugin implements Listener {
     private boolean toggleStaff(Player player) {
         UUID id = player.getUniqueId();
         if (staffMode.remove(id)) {
-            GameMode old = previousGameModes.remove(id);
-            if (old != null) player.setGameMode(old);
-            player.setAllowFlight(player.getGameMode() == GameMode.CREATIVE || player.getGameMode() == GameMode.SPECTATOR);
             if (vanished.contains(id)) setVanish(player, false);
             player.sendMessage("§cStaff mode disabled.");
         } else {
-            previousGameModes.put(id, player.getGameMode());
             staffMode.add(id);
-            player.setAllowFlight(true);
-            player.sendMessage("§aStaff mode enabled. §7Use /vanish, /inspect, /freeze and /stafftp.");
+            player.sendMessage("§aStaff mode enabled. §7Use /vanish, /inspect, /freeze and /stafftp. Flight remains controlled by MiraFly.");
         }
         return true;
     }
@@ -136,11 +129,8 @@ public final class MiraStaffPlugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onMove(PlayerMoveEvent event) {
-        if (!frozen.contains(event.getPlayer().getUniqueId())) return;
-        if (event.getTo() == null) return;
-        if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) {
-            event.setTo(event.getFrom());
-        }
+        if (!frozen.contains(event.getPlayer().getUniqueId()) || event.getTo() == null) return;
+        if (event.getFrom().getX() != event.getTo().getX() || event.getFrom().getY() != event.getTo().getY() || event.getFrom().getZ() != event.getTo().getZ()) event.setTo(event.getFrom());
     }
 
     @EventHandler
@@ -157,7 +147,6 @@ public final class MiraStaffPlugin extends JavaPlugin implements Listener {
             for (Player online : Bukkit.getOnlinePlayers()) if (online.hasPermission("mirastaff.use")) online.sendMessage("§c[FROZEN QUIT] §f" + event.getPlayer().getName() + " disconnected while frozen.");
         }
         staffMode.remove(event.getPlayer().getUniqueId());
-        previousGameModes.remove(event.getPlayer().getUniqueId());
         vanished.remove(event.getPlayer().getUniqueId());
     }
 
