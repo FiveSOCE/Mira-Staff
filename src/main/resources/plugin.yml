@@ -1,0 +1,32 @@
+name: MiraStaff
+version: 0.1.0
+main: gg.mira.staff.MiraStaffPlugin
+api-version: '1.21'
+author: FiveSOCE
+commands:
+  staff:
+    description: Toggle staff mode
+    permission: mirastaff.use
+  vanish:
+    description: Toggle vanish
+    permission: mirastaff.vanish
+  freeze:
+    description: Freeze or unfreeze a player
+    permission: mirastaff.freeze
+  inspect:
+    description: Inspect a player's inventory
+    permission: mirastaff.inspect
+  staffchat:
+    aliases: [sc]
+    description: Staff chat
+    permission: mirastaff.chat
+  stafftp:
+    description: Teleport to a player
+    permission: mirastaff.teleport
+permissions:
+  mirastaff.use: {default: op}
+  mirastaff.vanish: {default: op}
+  mirastaff.freeze: {default: op}
+  mirastaff.inspect: {default: op}
+  mirastaff.chat: {default: op}
+  mirastaff.teleport: {default: op}
