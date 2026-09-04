@@ -1,8 +1,11 @@
 name: MiraStaff
-version: 0.1.0
+version: 0.1.1
 main: gg.mira.staff.MiraStaffPlugin
 api-version: '1.21'
 author: FiveSOCE
+description: Staff mode, vanish, freeze, inspection and staff coordination for the Mira ecosystem.
+depend: [MiraCore]
+softdepend: [MiraPunishments, MiraReports, MiraFly]
 commands:
   staff:
     description: Toggle staff mode
@@ -23,9 +26,14 @@ commands:
   stafftp:
     description: Teleport to a player
     permission: mirastaff.teleport
+  staffstatus:
+    description: Show a player's MiraStaff state
+    usage: /staffstatus <player>
+    permission: mirastaff.use
 permissions:
   mirastaff.use: {default: op}
   mirastaff.vanish: {default: op}
+  mirastaff.vanish.see: {default: op}
   mirastaff.freeze: {default: op}
   mirastaff.inspect: {default: op}
   mirastaff.chat: {default: op}
