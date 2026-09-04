@@ -1,21 +1,29 @@
 # MiraStaff
 
-MiraStaff provides the core staff utility toolkit for the Mira Paper server suite. It includes staff mode, vanish, player freezing, live inventory inspection, staff teleporting and private staff chat while leaving flight authority to MiraFly.
+MiraStaff provides the staff utility toolkit for the Mira Paper server suite. It includes staff mode, vanish, player freezing, live inventory inspection, staff teleporting, state diagnostics and private staff chat while leaving flight authority to MiraFly.
 
 ## Download
 
-[**Download MiraStaff v0.1.0**](https://github.com/FiveSOCE/Mira-Staff/releases/download/v0.1.0/MiraStaff-0.1.0.jar)
+[**Download MiraStaff v0.1.1**](https://github.com/FiveSOCE/Mira-Staff/releases/download/v0.1.1/MiraStaff-0.1.1.jar)
+
+[View All Releases](https://github.com/FiveSOCE/Mira-Staff/releases)
 
 ## Requirements / Dependencies
 
 - Paper 1.21.11
 - Java 21
+- MiraCore 0.2.0 or newer
+- MiraPunishments optional integration
+- MiraReports optional integration
+- MiraFly remains the flight authority
 
 ## How MiraStaff Works
 
-Staff members can toggle a dedicated staff mode and use moderation utilities without each feature being split into separate plugins. Vanished staff can be hidden from normal players, frozen players are prevented from moving normally and staff are alerted if a frozen player disconnects. Inventory inspection provides live access to a player's inventory, while staff teleport and staff chat support moderation coordination.
+Staff members can toggle staff mode and use moderation utilities without duplicating punishment/report systems. Vanished staff are hidden from players without `mirastaff.vanish.see`. Frozen-player state persists to `plugins/MiraStaff/state.yml`, so a restart cannot silently clear an active staff freeze. Frozen disconnects are broadcast to staff and recorded through MiraCore audit history.
 
-MiraStaff exposes a public Bukkit ServicesManager API for integration with other Mira systems. It deliberately does not own Bukkit flight state; MiraFly remains the suite's flight authority.
+v0.1.1 registers `StaffApi` through Bukkit and MiraCore, audits staff-mode, vanish, freeze, inventory inspection, staff teleports and staff chat actions, and emits `StaffStateChangeEvent` for staff-mode/vanish/freeze state changes. Staff teleports use Paper's async teleport API, and inspection avoids pointless self-inspection.
+
+Staff mode intentionally does not own flight state. MiraFly remains the single flight authority for Mira-managed flight.
 
 ## Commands
 
@@ -23,10 +31,11 @@ MiraStaff exposes a public Bukkit ServicesManager API for integration with other
 | --- | --- | --- |
 | `/staff` | `mirastaff.use` | Toggles staff mode. |
 | `/vanish` | `mirastaff.vanish` | Toggles staff vanish. |
-| `/freeze <player>` | `mirastaff.freeze` | Freezes or unfreezes the selected player. |
-| `/inspect <player>` | `mirastaff.inspect` | Opens a live inventory inspection view for the selected player. |
+| `/freeze <player>` | `mirastaff.freeze` | Freezes or unfreezes the selected online player. |
+| `/inspect <player>` | `mirastaff.inspect` | Opens the selected player's live inventory. |
 | `/stafftp <player>` | `mirastaff.teleport` | Teleports the staff member to the selected player. |
 | `/staffchat <message>` | `mirastaff.chat` | Sends a private staff-chat message. |
+| `/staffstatus <player>` | `mirastaff.use` | Shows staff-mode, vanish and freeze state. |
 
 Alias: `/sc` for `/staffchat`.
 
@@ -34,9 +43,28 @@ Alias: `/sc` for `/staffchat`.
 
 | Permission | Default | What it does |
 | --- | --- | --- |
-| `mirastaff.use` | OP | Allows staff mode. |
+| `mirastaff.use` | OP | Allows staff mode and state inspection. |
 | `mirastaff.vanish` | OP | Allows vanish. |
+| `mirastaff.vanish.see` | OP | Allows seeing vanished MiraStaff users. |
 | `mirastaff.freeze` | OP | Allows freezing/unfreezing players. |
 | `mirastaff.inspect` | OP | Allows live inventory inspection. |
 | `mirastaff.chat` | OP | Allows staff chat. |
 | `mirastaff.teleport` | OP | Allows staff teleport. |
+
+## API / Integration
+
+`StaffApi` is registered through Bukkit ServicesManager and MiraCore. It exposes staff-mode, vanish and freeze queries, programmatic freeze control, and the current persistent frozen-player set.
+
+`StaffStateChangeEvent` provides a typed event for staff-mode, vanish and freeze transitions.
+
+## Persistence
+
+Persistent frozen-player state is stored in `plugins/MiraStaff/state.yml`. Staff mode and vanish are session states and intentionally clear when staff disconnect/restart.
+
+## Building
+
+```bash
+gradle clean build
+```
+
+The output JAR is created in `build/libs/`.
