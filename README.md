@@ -1,12 +1,14 @@
 # MiraStaff
 
-MiraStaff provides the staff utility toolkit for the Mira Paper server suite. It includes staff mode, vanish, player freezing, live inventory inspection, staff teleporting, state diagnostics and private staff chat while leaving flight authority to MiraFly.
-
 ## Download
 
-[**Download MiraStaff v0.1.1**](https://github.com/FiveSOCE/Mira-Staff/releases/download/v0.1.2/MiraStaff-0.1.2.jar)
+**Latest compatibility release: v0.1.2**
 
-[View All Releases](https://github.com/FiveSOCE/Mira-Staff/releases)
+[**Download MiraStaff-0.1.2.jar**](https://github.com/FiveSOCE/Mira-Staff/releases/download/v0.1.2/MiraStaff-0.1.2.jar)
+
+[View all releases](https://github.com/FiveSOCE/Mira-Staff/releases)
+
+MiraStaff provides the staff utility toolkit for the Mira Paper server suite. It includes staff mode, vanish, player freezing, live inventory inspection, staff teleporting, state diagnostics and private staff chat while leaving flight authority to MiraFly.
 
 ## Requirements / Dependencies
 
