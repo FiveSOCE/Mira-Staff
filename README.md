@@ -4,7 +4,7 @@ MiraStaff provides the staff utility toolkit for the Mira Paper server suite. It
 
 ## Download
 
-[**Download MiraStaff v0.1.1**](https://github.com/FiveSOCE/Mira-Staff/releases/download/v0.1.1/MiraStaff-0.1.1.jar)
+[**Download MiraStaff v0.1.1**](https://github.com/FiveSOCE/Mira-Staff/releases/download/v0.1.2/MiraStaff-0.1.2.jar)
 
 [View All Releases](https://github.com/FiveSOCE/Mira-Staff/releases)
 
